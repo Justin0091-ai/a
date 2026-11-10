@@ -172,22 +172,20 @@ Use simple language that is easy for beginners to understand.
 
     with st.spinner("🌱 AI is analysing your plant..."):
 
-        try:
+try:
+    response = client.models.generate_content(
+        model="gemini-3.8-flash",
+        contents=contents
+    )
 
-            response = client.models.generate_content(
-                model="gemini-3.8-flash",
-                contents=contents
-            )
+    st.success("Plant analysis completed!")
+    st.write(response.text)
 
-            st.divider()
-            st.subheader("🔍 Plant Analysis")
+except Exception as e:
+    st.error(
+        "Gemini is temporarily unavailable. "
+        "Please try again in a few minutes."
+    )
 
-            st.markdown(response.text)
-
-        except Exception as e:
-
-            st.error(
-                "Something went wrong while connecting to Gemini."
-            )
-
-            st.code(str(e))
+    with st.expander("Technical error details"):
+        st.write(e)
